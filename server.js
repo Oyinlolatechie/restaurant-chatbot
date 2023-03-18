@@ -1,7 +1,7 @@
 const path = require('path')
 const http = require('http')
 const express = require('express');
-const session = require('express-session')
+// const session = require('express-session')
 const socketio = require('socket.io');
 
 const formatMessage = require('./public/utlis/messages')
@@ -11,22 +11,22 @@ const server = http.createServer(app)
 const io = socketio(server)
 
 // configure session middleware
-const sessionMiddleware = session({
-    secret: "changeit",
-    resave: false,
-    saveUninitialized: false
-});
+// const sessionMiddleware = session({
+//     secret: "changeit",
+//     resave: false,
+//     saveUninitialized: false
+// });
 
-app.use(sessionMiddleware);
+// app.use(sessionMiddleware);
 
 
 //set public folder as static page
 app.use(express.static((path.join(__dirname, 'public'))));
 const PORT = 3000
 
-io.use((socket, next) => {
-    sessionMiddleware(socket.request, socket.request.res, next)
-})
+// io.use((socket, next) => {
+//     sessionMiddleware(socket.request, socket.request.res, next)
+// })
 
 
 //Run when client connects 
@@ -34,12 +34,12 @@ io.on('connection', (socket) => {
     console.log("New web-socket connected ...", socket.id)
 
     // get session ID from express-session middleware
-    const sessionId = socket.request.session.id;
+    // const sessionId = socket.request.session.id;
 
     // store session ID as property of socket object
-    socket.sessionId = sessionId;
+    // socket.sessionId = sessionId;
 
-    console.log(`User connected with session ID: ${sessionId}, ${socket.id}`);
+    // console.log(`User connected with session ID: ${sessionId}, ${socket.id}`);
 
    
     //welcome emit message 
@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
         let { chatMessage, username, id } = messageFromClient
       
         io.to(id).emit('message', formatMessage(username, chatMessage))
-        console.log(`This is the message from ${username}: socket ID ${id} and session ID ${sessionId},`)
+        // console.log(`This is the message from ${username}: socket ID ${id} and session ID ${sessionId},`)
 
         const items = ['Generator --#120,000', 'Speaker --#70,000', 'Blender --#15,000', 'Headset --#15,000', 'Cooker --#7,000'];
         //    let {chatMessage} = messageFromClient
@@ -146,7 +146,7 @@ io.on('connection', (socket) => {
 
 
                     //return selected items to chat
-                    io.to(id).emit('message', formatMessage("chatbot",
+                    io.to(id).emit('message', formatMessage("",
                         `order added :
            <p> ${orders.map((order, index) => `${index + 1}. ${order}`).join('</p>')}
            `
