@@ -10,36 +10,14 @@ const app = express()
 const server = http.createServer(app)
 const io = socketio(server)
 
-// configure session middleware
-// const sessionMiddleware = session({
-//     secret: "changeit",
-//     resave: false,
-//     saveUninitialized: false
-// });
-
-// app.use(sessionMiddleware);
-
 
 //set public folder as static page
 app.use(express.static((path.join(__dirname, 'public'))));
 const PORT = 3000
 
-// io.use((socket, next) => {
-//     sessionMiddleware(socket.request, socket.request.res, next)
-// })
-
-
 //Run when client connects 
 io.on('connection', (socket) => {
     console.log("New web-socket connected ...", socket.id)
-
-    // get session ID from express-session middleware
-    // const sessionId = socket.request.session.id;
-
-    // store session ID as property of socket object
-    // socket.sessionId = sessionId;
-
-    // console.log(`User connected with session ID: ${sessionId}, ${socket.id}`);
 
    
     //welcome emit message 
@@ -50,9 +28,6 @@ io.on('connection', (socket) => {
         <p> >> Select 98 to see order history </p>
         <p> >> Select 97 to see current order </p>
         <p> >> Select 0 to cancel order </p>`));
-
-   // Broadcast when user connects
-    // socket.to(sessionId).emit('message', formatMessage(USER, 'A user just joined the chatroom', sessionId))
 
 
     // Store user's orders globally
@@ -66,7 +41,7 @@ io.on('connection', (socket) => {
         let { chatMessage, username, id } = messageFromClient
       
         io.to(id).emit('message', formatMessage(username, chatMessage))
-        // console.log(`This is the message from ${username}: socket ID ${id} and session ID ${sessionId},`)
+        
 
         const items = ['Generator --#120,000', 'Speaker --#70,000', 'Blender --#15,000', 'Headset --#15,000', 'Cooker --#7,000'];
         //    let {chatMessage} = messageFromClient
@@ -146,7 +121,7 @@ io.on('connection', (socket) => {
 
 
                     //return selected items to chat
-                    io.to(id).emit('message', formatMessage("",
+                    io.to(id).emit('message', formatMessage("chatbot",
                         `order added :
            <p> ${orders.map((order, index) => `${index + 1}. ${order}`).join('</p>')}
            `
@@ -164,8 +139,6 @@ io.on('connection', (socket) => {
     //Broadcast when a user disconnects
     socket.on('disconnect', () => {
         console.log("User web-socket disconnected ...")
-
-        // io.emit('message', formatMessage("USER", 'A user has just disconnected'))
     })
 
 })
