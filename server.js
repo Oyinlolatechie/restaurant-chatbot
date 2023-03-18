@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
         io.to(id).emit('message', formatMessage(username, chatMessage))
         
 
-        const items = ['Generator --#120,000', 'Speaker --#70,000', 'Blender --#15,000', 'Headset --#15,000', 'Cooker --#7,000'];
+        const items = ['Pounded Yam --#2,500', 'Spaghetti --#1,500', 'Ice cream --#1,000', 'Burger --#3,000', 'Doughnuts --#1,000'];
         //    let {chatMessage} = messageFromClient
 
         switch (chatMessage) {
@@ -143,6 +143,5 @@ io.on('connection', (socket) => {
 
 })
 
-io.listen(5000);
 
 server.listen(PORT, () => console.log(`server started on http://localhost:${PORT}`))
